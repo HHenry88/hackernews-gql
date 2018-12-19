@@ -3,19 +3,30 @@ const { GraphQLServer } = require("graphql-yoga");
 const resolvers = {
   Query: {
     info: () => `This is the API of a Hackernews Clone`,
-    feed: () => links,
+    feed: (root, args, context, info) => {
+      return context.db.query.links({}, info);
+    },
     link: (root, args) => links.find(link => link.id === args.id)
   },
   Mutation: {
-    post: (root, args) => {
-      const link = {
-        id: `link-${idCount++}`,
-        description: args.description,
-        url: args.url
-      };
+    post: (root, args, context, info) => {
+      return context.db.mutation.createLink(
+        {
+          data: {
+            url: args.url,
+            description: args.description
+          }
+        },
+        info
+      );
+      // const link = {
+      //   id: `link-${idCount++}`,
+      //   description: args.description,
+      //   url: args.url
+      // };
 
-      links.push(link);
-      return link;
+      // links.push(link);
+      // return link;
     },
     updateLink: (root, args) => {
       let foundI = "";
