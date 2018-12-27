@@ -1,0 +1,10 @@
+#endpoint: ""
+endpoint: https://eu1.prisma.sh/henry-han-86a8fb/database/dev
+
+datamodel: datamodel.graphql
+
+secret: mysecret123
+
+hooks:
+  post-deploy:
+    - graphql get-schema --project database
